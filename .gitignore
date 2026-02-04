@@ -1,0 +1,66 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+.pytest_cache/
+
+# Build
+frontend/build/
+*.tgz
+
+# ML Models
+ai-service/models/
+*.pkl
+*.h5
+*.pt
+
+# Transformer files (optional deployment, not part of main project)
+huggingface-space/
+ai-service/app_transformers.py
+ai-service/requirements_transformers.txt
+DEPLOYMENT_GUIDE.md
+QUICK_START.md
+
+# Misc
+.cache/
+tmp/
+temp/

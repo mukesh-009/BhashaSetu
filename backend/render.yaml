@@ -1,0 +1,22 @@
+# Build configuration for Render
+buildCommand: npm install && npm run build
+startCommand: npm start
+
+# Environment
+environment: node
+
+# Service type
+type: web
+
+# Region (choose closest to your users)
+region: oregon
+
+# Instance type
+plan: free
+
+# Health check
+healthCheckPath: /api/health
+
+# Environment variables (set in Render dashboard)
+# PYTHON_SERVICE_URL=https://your-username-translator.hf.space
+# PORT=5002

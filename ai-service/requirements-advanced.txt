@@ -1,0 +1,12 @@
+# Optional: Advanced ML Models (Large Download - Use only if needed)
+# These are heavy dependencies (2-3 GB) and take longer to install
+# The app works fine without these using Google Translate
+
+transformers==4.36.0
+torch==2.1.0
+sentencepiece==0.1.99
+sacremoses==0.1.1
+protobuf==4.25.0
+
+# To install these:
+# pip install -r requirements-advanced.txt
