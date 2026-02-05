@@ -12,6 +12,8 @@
   },
 
   "postCreateCommand": "bash .devcontainer/setup.sh",
+  
+  "postStartCommand": "echo '✅ Codespace ready! Run: bash .devcontainer/start-services.sh'",
 
   "forwardPorts": [3000, 5001, 5002],
   
