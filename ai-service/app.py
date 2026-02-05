@@ -119,7 +119,13 @@ def translate():
     try:
         data = request.get_json()
         text = data.get('text', '')
-        sousource_lang not in SUPPORTED_LANGUAGES:
+        source_lang = data.get('source_lang', 'en')
+        target_lang = data.get('target_lang', 'hi')
+        
+        if not text:
+            return jsonify({'error': 'Text is required'}), 400
+        
+        if source_lang not in SUPPORTED_LANGUAGES:
             return jsonify({'error': f'Source language {source_lang} not supported'}), 400
             
         if target_lang not in SUPPORTED_LANGUAGES:
@@ -135,13 +141,7 @@ def translate():
             'source_lang': source_lang,
             'target_lang': target_lang,
             'confidence': 0.95,
-            'method': 'transformers-m2m100
-            'translated_text': translated_text,
-            'source_lang': source_lang,
-            'target_lang': target_lang,
-            'detected_lang': detected_lang,
-            'confidence': 0.95,
-            'method': 'google-translate'
+            'method': 'transformers-m2m100'
         })
     
     except Exception as e:
