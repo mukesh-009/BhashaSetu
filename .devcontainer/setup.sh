@@ -3,19 +3,26 @@
 echo "🚀 Setting up Rural School AI Translator in Codespaces..."
 echo "============================================================"
 
+# Get the directory where this script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Go up one level to get the workspace root
+WORKSPACE_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
+
+echo "Working directory: $WORKSPACE_ROOT"
+
 # Install Python dependencies
 echo "📦 Installing Python dependencies..."
-cd /workspaces/TP/ai-service
-pip install Flask flask-cors deep-translator gTTS
+cd "$WORKSPACE_ROOT/ai-service"
+pip install -r requirements.txt
 
 # Install Backend dependencies
 echo "📦 Installing Backend dependencies..."
-cd /workspaces/TP/backend
+cd "$WORKSPACE_ROOT/backend"
 npm install
 
 # Install Frontend dependencies
 echo "📦 Installing Frontend dependencies..."
-cd /workspaces/TP/frontend
+cd "$WORKSPACE_ROOT/frontend"
 npm install
 
 echo "============================================================"
