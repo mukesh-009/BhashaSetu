@@ -1,6 +1,10 @@
 # 🎓 Rural School AI Translator
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/mukesh-009/TP)
+
 An AI-powered translation system designed specifically for rural schools, supporting **13 Indian languages** and **5 major foreign languages** using the **M2M100 transformer model**. This project aims to break language barriers in education and empower students and teachers with multilingual capabilities.
+
+> 🚀 **Quick Start**: Click the badge above to open this project in GitHub Codespaces - no local setup required! See [Codespaces Guide](./CODESPACES_GUIDE.md) for details.
 
 ## 🌟 Features
 
@@ -46,7 +50,23 @@ An AI-powered translation system designed specifically for rural schools, suppor
 
 ## 🚀 Quick Start
 
-### Option 1: Local Development
+### Option 1: GitHub Codespaces (Recommended - No Setup Required!)
+
+**Perfect for demos, presentations, and quick testing!**
+
+1. Click the **"Open in GitHub Codespaces"** badge at the top of this README
+2. Wait 2-3 minutes for the environment to set up automatically
+3. Once ready, run in the terminal:
+   ```bash
+   ./start-all.sh
+   ```
+4. The application will open automatically in your browser!
+
+📖 See detailed instructions in [CODESPACES_GUIDE.md](./CODESPACES_GUIDE.md)
+
+---
+
+### Option 2: Local Development
 
 #### 1. Clone the Repository
 ```bash
@@ -83,7 +103,7 @@ npm start
 # Frontend will run on http://localhost:3000
 ```
 
-### Option 2: Docker Deployment
+### Option 3: Docker Deployment
 
 ```bash
 # Build and run all services
