@@ -1,16 +1,16 @@
 # 🎓 Rural School AI Translator
 
-An AI-powered translation system designed specifically for rural schools, supporting **22 Indian languages** and **5 major foreign languages**. This project aims to break language barriers in education and empower students and teachers with multilingual capabilities.
+An AI-powered translation system designed specifically for rural schools, supporting **13 Indian languages** and **5 major foreign languages** using the **M2M100 transformer model**. This project aims to break language barriers in education and empower students and teachers with multilingual capabilities.
 
 ## 🌟 Features
 
-- ✅ **27 Languages Supported**
-  - 22 Indian Languages: Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia, Assamese, Kashmiri, Sindhi, Nepali, Sanskrit, Urdu, Konkani, Maithili, Santali, Dogri, Manipuri, Bodo
+- ✅ **18 Languages Supported (M2M100 Model)**
+  - 13 Indian Languages: Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia, Assamese, Nepali, Urdu
   - 5 Foreign Languages: English, Spanish, French, Chinese, Arabic
 
 - 🗣️ **Text-to-Speech (TTS)**: Listen to translations in native pronunciation
 - 🔄 **Batch Translation**: Translate multiple texts at once
-- ⚡ **Fast & Accurate**: AI-powered with hybrid translation approach (MarianMT + Google Translate)
+- ⚡ **Fast & Accurate**: AI-powered using Facebook's M2M100 transformer model (418M parameters)
 - 🎨 **Modern UI**: Beautiful, responsive React interface
 - 🐳 **Docker Ready**: Easy deployment with Docker Compose
 - 🔒 **Secure**: Built with security best practices
@@ -32,7 +32,7 @@ An AI-powered translation system designed specifically for rural schools, suppor
          ↓
 ┌─────────────────┐
 │  Python AI Service│ (Flask + Transformers)
-│   Port: 5001     │ (MarianMT + Google Translate)
+│   Port: 5001     │ (M2M100 - 418M)
 └──────────────────┘
 ```
 
@@ -72,6 +72,7 @@ pip install -r requirements.txt
 cp .env.example .env
 python app.py
 # AI Service will run on http://localhost:5001
+# Note: First run will download M2M100 model (~1.5GB)
 ```
 
 #### 4. Setup Frontend (React)

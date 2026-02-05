@@ -8,12 +8,15 @@ import Header from './components/Header';
 import { Language, TranslationResponse } from './types';
 import { useSpeechRecognition } from './hooks/useSpeechRecognition';
 
-// Language code to Speech Recognition locale mapping
+// Language code to Speech Recognition locale mapping (M2M100 Model - 18 languages)
+// 13 Indian languages + 5 foreign languages
 const langToLocaleMap: { [key: string]: string } = {
-  'en': 'en-US', 'hi': 'hi-IN', 'bn': 'bn-IN', 'te': 'te-IN',
-  'mr': 'mr-IN', 'ta': 'ta-IN', 'gu': 'gu-IN', 'kn': 'kn-IN',
-  'ml': 'ml-IN', 'pa': 'pa-IN', 'ur': 'ur-PK', 'es': 'es-ES',
-  'fr': 'fr-FR', 'zh': 'zh-CN', 'ar': 'ar-SA'
+  // Foreign languages
+  'en': 'en-US', 'es': 'es-ES', 'fr': 'fr-FR', 'zh': 'zh-CN', 'ar': 'ar-SA',
+  // Indian languages  
+  'hi': 'hi-IN', 'bn': 'bn-IN', 'te': 'te-IN', 'mr': 'mr-IN', 'ta': 'ta-IN',
+  'gu': 'gu-IN', 'kn': 'kn-IN', 'ml': 'ml-IN', 'pa': 'pa-IN', 'or': 'or-IN',
+  'as': 'as-IN', 'ne': 'ne-NP', 'ur': 'ur-PK'
 };
 
 const App: React.FC = () => {

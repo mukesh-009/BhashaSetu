@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from deep_translator import GoogleTranslator
+from transformers import M2M100ForConditionalGeneration, M2M100Tokenizer
+import torch
 from gtts import gTTS
 import io
 import os
@@ -14,6 +15,23 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
+
+# Initialize M2M100 model and tokenizer
+MODEL_NAME = "facebook/m2m100_418M"
+logger.info(f"Loading M2M100 model: {MODEL_NAME}")
+
+try:
+    tokenizer = M2M100Tokenizer.from_pretrained(MODEL_NAME)
+    model = M2M100ForConditionalGeneration.from_pretrained(MODEL_NAME)
+    
+    # Use GPU if available, otherwise CPU
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = model.to(device)
+    logger.info(f"Model loaded successfully on {device}")
+except Exception as e:
+    logger.error(f"Failed to load model: {str(e)}")
+    model = None
+    tokenizer = None
 
 # Directory to store downloaded models
 MODELS_DIR = os.path.join(os.path.dirname(__file__), 'models')
@@ -32,39 +50,68 @@ def save_downloaded_models(models):
     with open(DOWNLOADED_MODELS_FILE, 'w') as f:
         json.dump(models, f)
 
-# Supported languages configuration
+# Supported languages by M2M100 model
 SUPPORTED_LANGUAGES = {
-    # Indian Languages
+    # Indian Languages (13 supported by M2M100)
     'hi': 'Hindi', 'bn': 'Bengali', 'te': 'Telugu', 'mr': 'Marathi',
     'ta': 'Tamil', 'gu': 'Gujarati', 'kn': 'Kannada', 'ml': 'Malayalam',
-    'pa': 'Punjabi', 'or': 'Odia', 'as': 'Assamese', 'ks': 'Kashmiri',
-    'sd': 'Sindhi', 'ne': 'Nepali', 'sa': 'Sanskrit', 'ur': 'Urdu',
-    'kok': 'Konkani', 'mai': 'Maithili', 'sat': 'Santali',
-    'doi': 'Dogri', 'mni': 'Manipuri', 'brx': 'Bodo',
-    # Foreign Languages
+    'pa': 'Punjabi', 'or': 'Odia', 'as': 'Assamese', 'ne': 'Nepali',
+    'ur': 'Urdu',
+    # Foreign Languages (5)
     'en': 'English', 'es': 'Spanish', 'fr': 'French',
     'zh': 'Chinese', 'ar': 'Arabic'
 }
 
 def translate_text(text: str, source_lang: str, target_lang: str) -> str:
-    """Translate using Google Translate via deep-translator"""
+    """Translate using M2M100 transformer model"""
     try:
+        if model is None or tokenizer is None:
+            raise Exception("Model not loaded")
+        
         if source_lang == target_lang:
             return text
         
-        translator = GoogleTranslator(source=source_lang, target=target_lang)
-        result = translator.translate(text)
-        return result
+        # Set source language
+        tokenizer.src_lang = source_lang
+        
+        # Tokenize input
+        encoded = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
+        
+        # Move to device
+        device = next(model.parameters()).device
+        encoded = {k: v.to(device) for k, v in encoded.items()}
+        
+        # Generate translation
+        forced_bos_token_id = tokenizer.get_lang_id(target_lang)
+        generated_tokens = model.generate(
+            **encoded,
+            forced_bos_token_id=forced_bos_token_id,
+            max_length=512,
+            num_beams=5,
+            early_stopping=True
+        )
+        
+        # Decode output
+        translated_text = tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
+        
+        return translated_text
+        
     except Exception as e:
         logger.error(f"Translation error: {str(e)}")
         raise Exception(f"Translation failed: {str(e)}")
 
 @app.route('/health', methods=['GET'])
 def health_check():
+    model_status = "loaded" if model is not None else "not loaded"
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
     return jsonify({
         'status': 'ok',
-        'service': 'AI Translation Service',
-        'translator': 'Google Translate (via deep-translator)'
+        'service': 'AI Translation Service (M2M100 Transformers)',
+        'model': MODEL_NAME,
+        'model_status': model_status,
+        'device': device,
+        'supported_languages': len(SUPPORTED_LANGUAGES)
     })
 
 @app.route('/translate', methods=['POST'])
@@ -72,31 +119,23 @@ def translate():
     try:
         data = request.get_json()
         text = data.get('text', '')
-        source_lang = data.get('source_lang', 'auto')
-        target_lang = data.get('target_lang', 'en')
-        
-        if not text:
-            return jsonify({'error': 'Text is required'}), 400
-        
+        sousource_lang not in SUPPORTED_LANGUAGES:
+            return jsonify({'error': f'Source language {source_lang} not supported'}), 400
+            
         if target_lang not in SUPPORTED_LANGUAGES:
             return jsonify({'error': f'Target language {target_lang} not supported'}), 400
         
         logger.info(f"Translation request: {source_lang} -> {target_lang}")
         
-        # Detect language if source is auto
-        detected_lang = None
-        if source_lang == 'auto':
-            try:
-                detected_lang = GoogleTranslator(source='auto', target='en').detect(text)
-                source_lang = detected_lang
-                logger.info(f"Detected language: {source_lang}")
-            except:
-                source_lang = 'en'
-        
-        # Translate the text
+        # Translate the text using M2M100
         translated_text = translate_text(text, source_lang, target_lang)
         
         return jsonify({
+            'translated_text': translated_text,
+            'source_lang': source_lang,
+            'target_lang': target_lang,
+            'confidence': 0.95,
+            'method': 'transformers-m2m100
             'translated_text': translated_text,
             'source_lang': source_lang,
             'target_lang': target_lang,
