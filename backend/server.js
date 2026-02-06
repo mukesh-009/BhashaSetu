@@ -14,8 +14,8 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'));
 
-// Supported Languages Configuration (M2M100 Model)
-// 18 languages supported: 13 Indian + 5 Foreign
+// Supported Languages Configuration (Google Translate)
+// 27 languages supported: 22 Indian + 5 Foreign
 const SUPPORTED_LANGUAGES = {
   indian: {
     'hi': 'Hindi',
@@ -29,8 +29,17 @@ const SUPPORTED_LANGUAGES = {
     'pa': 'Punjabi',
     'or': 'Odia',
     'as': 'Assamese',
+    'ks': 'Kashmiri',
+    'sd': 'Sindhi',
     'ne': 'Nepali',
-    'ur': 'Urdu'
+    'sa': 'Sanskrit',
+    'ur': 'Urdu',
+    'kok': 'Konkani',
+    'mai': 'Maithili',
+    'sat': 'Santali',
+    'doi': 'Dogri',
+    'mni': 'Manipuri',
+    'brx': 'Bodo'
   },
   foreign: {
     'en': 'English',
