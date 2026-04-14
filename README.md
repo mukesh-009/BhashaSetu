@@ -1,314 +1,219 @@
-#  Rural School AI Translator
+# BhashaSetu
 
-An AI-powered translation system designed specifically for rural schools, supporting **13 Indian languages** and **5 major foreign languages** using the **M2M100 transformer model**. This project aims to break language barriers in education and empower students and teachers with multilingual capabilities.
+BhashaSetu is a multilingual translation platform built to support communication and learning in rural and multilingual classrooms. It provides text translation, voice output, and batch translation using a three-service architecture.
 
-## Features
+## Overview
 
-- ✅ **18 Languages Supported (M2M100 Model)**
-  - 13 Indian Languages: Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia, Assamese, Nepali, Urdu
-  - 5 Foreign Languages: English, Spanish, French, Chinese, Arabic
+- Translation model: `facebook/m2m100_418M` (Hugging Face Transformers)
+- Supported language set in current implementation: 18 (13 Indian + 5 foreign)
+- Frontend: React + TypeScript
+- Backend: Node.js + Express
+- AI service: Python + Flask + PyTorch + Transformers
 
-- **Text-to-Speech (TTS)**: Listen to translations in native pronunciation
-- **Batch Translation**: Translate multiple texts at once
-- **Fast & Accurate**: AI-powered using Facebook's M2M100 transformer model (418M parameters)
-- **Modern UI**: Beautiful, responsive React interface
-- **Docker Ready**: Easy deployment with Docker Compose
-- **Secure**: Built with security best practices
+## Key Features
 
-## Architecture
+- Multilingual text translation across supported language pairs
+- Text-to-speech playback for translated output
+- Batch translation API for multiple inputs in one request
+- Responsive web UI for classroom and demo usage
+- Docker Compose setup for one-command deployment
 
+## System Architecture
+
+```text
+Browser (Frontend, :3000)
+        |
+        v
+Node.js API Gateway (Backend, :5002 host -> :5000 container)
+        |
+        v
+Python AI Service (Flask, :5001)
 ```
-┌─────────────────┐
-│   React Frontend │ (TypeScript, Modern UI)
-│   Port: 3000     │
-└────────┬─────────┘
-         │
-         ↓
-┌─────────────────┐
-│  Node.js Backend │ (Express API)
-│   Port: 5000     │
-└────────┬─────────┘
-         │
-         ↓
-┌─────────────────┐
-│  Python AI Service│ (Flask + Transformers)
-│   Port: 5001     │ (M2M100 - 418M)
-└──────────────────┘
+
+Request flow:
+1. Frontend sends translation request to backend `/api/translate`.
+2. Backend validates payload and forwards to AI service `/translate`.
+3. AI service runs M2M100 inference and returns translated text.
+4. Backend formats response and returns it to frontend.
+
+## Repository Structure
+
+```text
+BhashaSetu/
+├── ai-service/              # Flask + Transformers translation service
+├── backend/                 # Express API gateway
+├── frontend/                # React TypeScript web client
+├── reports/                 # Project reports and progress artifacts
+├── docker-compose.yml       # Multi-service orchestration
+├── start-all.sh             # Local script (non-Docker)
+└── README.md
 ```
 
 ## Prerequisites
 
-- **Node.js**: v16 or higher
-- **Python**: v3.8 or higher
-- **npm** or **yarn**
-- **pip**
-- **Docker** (optional, for containerized deployment)
+For Docker run (recommended):
+- Docker Desktop (or Docker Engine + Compose)
+- Git
 
-## Quick Start
+For local non-Docker run:
+- Node.js 18+
+- Python 3.11 recommended
+- npm and pip
 
-### Option 1: Local Development
+## Quick Start (Recommended: Docker)
 
-#### 1. Clone the Repository
 ```bash
-git clone <your-repo-url>
-cd TP
+git clone https://github.com/mukesh-009/BhashaSetu.git
+cd BhashaSetu
+docker compose up -d --build
 ```
 
-#### 2. Setup Backend (Node.js)
+Open:
+- Frontend: http://localhost:3000
+- Backend health: http://localhost:5002/api/health
+- AI health: http://localhost:5001/health
+
+Stop:
+
+```bash
+docker compose down
+```
+
+## Local Development (Without Docker)
+
+Run each service in a separate terminal.
+
+1. AI service
+
+```bash
+cd ai-service
+python3.11 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+
+2. Backend
+
 ```bash
 cd backend
 npm install
-cp .env.example .env
 npm start
-# Backend will run on http://localhost:5000
 ```
 
-#### 3. Setup AI Service (Python)
-```bash
-cd ai-service
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-cp .env.example .env
-python app.py
-# AI Service will run on http://localhost:5001
-# Note: First run will download M2M100 model (~1.5GB)
-```
+3. Frontend
 
-#### 4. Setup Frontend (React)
 ```bash
 cd frontend
 npm install
 npm start
-# Frontend will run on http://localhost:3000
 ```
 
-### Option 2: Docker Deployment
+## API Reference
 
-```bash
-# Build and run all services
-docker-compose up --build
-
-# Access the application
-# Frontend: http://localhost:3000
-# Backend API: http://localhost:5000
-# AI Service: http://localhost:5001
-```
-
-## Project Structure
-
-```
-TP/
-├── backend/                 # Node.js Express API
-│   ├── server.js           # Main server file
-│   ├── package.json        # Dependencies
-│   ├── Dockerfile          # Docker configuration
-│   └── .env.example        # Environment variables template
-│
-├── ai-service/             # Python Flask AI Service
-│   ├── app.py              # Main Flask application
-│   ├── requirements.txt    # Python dependencies
-│   ├── Dockerfile          # Docker configuration
-│   └── .env.example        # Environment variables template
-│
-├── frontend/               # React TypeScript Frontend
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── services/       # API services
-│   │   ├── types/          # TypeScript types
-│   │   ├── App.tsx         # Main App component
-│   │   └── index.tsx       # Entry point
-│   ├── public/             # Static files
-│   ├── package.json        # Dependencies
-│   ├── Dockerfile          # Docker configuration
-│   └── nginx.conf          # Nginx configuration
-│
-├── docker-compose.yml      # Docker Compose configuration
-├── .gitignore              # Git ignore rules
-└── README.md               # This file
-```
-
-## 🔧 API Endpoints
-
-### Backend API (Port 5000)
+Base URL: `http://localhost:5002/api`
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/health` | GET | Health check |
-| `/api/languages` | GET | Get all supported languages |
-| `/api/translate` | POST | Translate text |
-| `/api/translate/batch` | POST | Batch translate multiple texts |
-| `/api/tts` | POST | Text-to-speech conversion |
+|---|---|---|
+| `/health` | GET | Backend service health |
+| `/languages` | GET | Returns supported language map |
+| `/translate` | POST | Single text translation |
+| `/translate/batch` | POST | Batch translation |
+| `/tts` | POST | Text-to-speech audio response |
 
-### Example API Usage
+Example request:
 
-#### Translate Text
 ```bash
-curl -X POST http://localhost:5000/api/translate \
+curl -X POST http://localhost:5002/api/translate \
   -H "Content-Type: application/json" \
   -d '{
-    "text": "Hello, how are you?",
+    "text": "Hello students",
     "sourceLang": "en",
     "targetLang": "hi"
   }'
 ```
 
-#### Response
-```json
-{
-  "success": true,
-  "data": {
-    "originalText": "Hello, how are you?",
-    "translatedText": "नमस्ते, आप कैसे हैं?",
-    "sourceLang": "en",
-    "targetLang": "hi",
-    "confidence": 0.95,
-    "detectedLang": null
-  }
-}
-```
+## Supported Languages (Current)
 
-## Supported Languages
+Indian:
+- Hindi (`hi`)
+- Bengali (`bn`)
+- Telugu (`te`)
+- Marathi (`mr`)
+- Tamil (`ta`)
+- Gujarati (`gu`)
+- Kannada (`kn`)
+- Malayalam (`ml`)
+- Punjabi (`pa`)
+- Odia (`or`)
+- Assamese (`as`)
+- Nepali (`ne`)
+- Urdu (`ur`)
 
-### Indian Languages (22)
-- Hindi (hi)
-- Bengali (bn)
-- Telugu (te)
-- Marathi (mr)
-- Tamil (ta)
-- Gujarati (gu)
-- Kannada (kn)
-- Malayalam (ml)
-- Punjabi (pa)
-- Odia (or)
-- Assamese (as)
-- Kashmiri (ks)
-- Sindhi (sd)
-- Nepali (ne)
-- Sanskrit (sa)
-- Urdu (ur)
-- Konkani (kok)
-- Maithili (mai)
-- Santali (sat)
-- Dogri (doi)
-- Manipuri (mni)
-- Bodo (brx)
+Foreign:
+- English (`en`)
+- Spanish (`es`)
+- French (`fr`)
+- Chinese (`zh`)
+- Arabic (`ar`)
 
-### Foreign Languages (5)
-- English (en)
-- Spanish (es)
-- French (fr)
-- Chinese (zh)
-- Arabic (ar)
+## Configuration
 
-## Frontend Features
+Common backend environment variables:
+- `PORT` (default: `5002` for local host usage)
+- `PYTHON_SERVICE_URL` (default: `http://localhost:5001`)
 
-- **Modern UI**: Beautiful gradient design with smooth animations
-- **Responsive**: Works on desktop, tablet, and mobile
-- **Language Swap**: Quick swap between source and target languages
-- **Text-to-Speech**: Listen to both input and output text
-- **Character Counter**: Real-time character count (max 5000)
-- **Loading States**: Clear feedback during translation
-- **Error Handling**: User-friendly error messages
-
-## Security Features
-
-- Helmet.js for security headers
-- CORS configuration
-- Input validation
-- Rate limiting ready
-- Environment variables for sensitive data
-
-## Performance
-
-- **Translation Speed**: < 2 seconds for most language pairs
-- **Concurrent Users**: Supports multiple simultaneous translations
-- **Caching**: Model caching for faster repeated translations
-- **Scalable**: Microservices architecture for easy scaling
-
-## Development
-
-### Running Tests
-```bash
-# Backend tests
-cd backend
-npm test
-
-# Frontend tests
-cd frontend
-npm test
-```
-
-### Building for Production
-```bash
-# Backend
-cd backend
-npm start
-
-# Frontend
-cd frontend
-npm run build
-```
+Frontend:
+- `REACT_APP_API_URL` (optional override for API base URL)
 
 ## Troubleshooting
 
-### Common Issues
+### Frontend not loading on localhost
 
-1. **Port Already in Use**
-   ```bash
-   # Kill process on port 5000 (macOS/Linux)
-   lsof -ti:5000 | xargs kill -9
-   
-   # Windows
-   netstat -ano | findstr :5000
-   taskkill /PID <PID> /F
-   ```
+- Ensure Docker is running.
+- Use `http://localhost:3000` (not `https://localhost:3000`).
+- Check containers:
 
-2. **Python Dependencies Not Installing**
-   ```bash
-   pip install --upgrade pip
-   pip install -r requirements.txt --no-cache-dir
-   ```
+```bash
+docker compose ps
+```
 
-3. **Frontend Not Connecting to Backend**
-   - Check `.env` file in frontend has correct `REACT_APP_API_URL`
-   - Ensure backend is running on port 5000
-   - Check CORS settings in backend
+### Services are up but translation is not working
 
-## Contributing
+- Check backend and AI service health endpoints.
+- Inspect logs:
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+```bash
+docker compose logs -f ai-service backend frontend
+```
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+### First start is slow
 
-## License
+On first run, the AI service downloads and initializes M2M100 model files. This may take several minutes depending on network speed.
 
-This project is licensed under the MIT License.
+## Development Scripts
 
-## Authors
+Backend:
+- `npm start` - start API server
+- `npm run dev` - start with nodemon
+- `npm test` - run tests
 
-- Mukesh Ruwali 
+Frontend:
+- `npm start` - start dev server
+- `npm run build` - production build
+- `npm test` - run tests
 
-## Acknowledgments
+## Roadmap
 
-- Hugging Face Transformers for MarianMT models
-- Google Translate API for fallback translation
-- React and TypeScript community
-- All contributors and supporters
+- Improve language auto-detection
+- Add model fallback and resilience strategy
+- Add user feedback loop for translation quality
+- Extend monitoring and test coverage
 
-## Toadmap
+## Contribution
 
-- [ ] Add speech-to-text (voice input)
-- [ ] Implement user authentication
-- [ ] Add translation history
-- [ ] Support document translation
-- [ ] Add offline mode
-- [ ] Mobile app development
-- [ ] Add more regional Indian languages
+Contributions are welcome. Please open an issue for major changes before submitting a pull request.
 
--
-**Made with for Rural Education**
+## Project Status
+
+Active academic/project development with deployable Docker workflow.
