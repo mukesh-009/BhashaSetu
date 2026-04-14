@@ -1,21 +1,21 @@
-# 🎓 Rural School AI Translator
+#  Rural School AI Translator
 
 An AI-powered translation system designed specifically for rural schools, supporting **13 Indian languages** and **5 major foreign languages** using the **M2M100 transformer model**. This project aims to break language barriers in education and empower students and teachers with multilingual capabilities.
 
-## 🌟 Features
+## Features
 
 - ✅ **18 Languages Supported (M2M100 Model)**
   - 13 Indian Languages: Hindi, Bengali, Telugu, Marathi, Tamil, Gujarati, Kannada, Malayalam, Punjabi, Odia, Assamese, Nepali, Urdu
   - 5 Foreign Languages: English, Spanish, French, Chinese, Arabic
 
-- 🗣️ **Text-to-Speech (TTS)**: Listen to translations in native pronunciation
-- 🔄 **Batch Translation**: Translate multiple texts at once
-- ⚡ **Fast & Accurate**: AI-powered using Facebook's M2M100 transformer model (418M parameters)
-- 🎨 **Modern UI**: Beautiful, responsive React interface
-- 🐳 **Docker Ready**: Easy deployment with Docker Compose
-- 🔒 **Secure**: Built with security best practices
+- **Text-to-Speech (TTS)**: Listen to translations in native pronunciation
+- **Batch Translation**: Translate multiple texts at once
+- **Fast & Accurate**: AI-powered using Facebook's M2M100 transformer model (418M parameters)
+- **Modern UI**: Beautiful, responsive React interface
+- **Docker Ready**: Easy deployment with Docker Compose
+- **Secure**: Built with security best practices
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐
@@ -36,7 +36,7 @@ An AI-powered translation system designed specifically for rural schools, suppor
 └──────────────────┘
 ```
 
-## 📋 Prerequisites
+## Prerequisites
 
 - **Node.js**: v16 or higher
 - **Python**: v3.8 or higher
@@ -44,7 +44,7 @@ An AI-powered translation system designed specifically for rural schools, suppor
 - **pip**
 - **Docker** (optional, for containerized deployment)
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Option 1: Local Development
 
@@ -95,7 +95,7 @@ docker-compose up --build
 # AI Service: http://localhost:5001
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 TP/
@@ -168,7 +168,7 @@ curl -X POST http://localhost:5000/api/translate \
 }
 ```
 
-## 🌐 Supported Languages
+## Supported Languages
 
 ### Indian Languages (22)
 - Hindi (hi)
@@ -201,7 +201,7 @@ curl -X POST http://localhost:5000/api/translate \
 - Chinese (zh)
 - Arabic (ar)
 
-## 🎨 Frontend Features
+## Frontend Features
 
 - **Modern UI**: Beautiful gradient design with smooth animations
 - **Responsive**: Works on desktop, tablet, and mobile
@@ -211,7 +211,7 @@ curl -X POST http://localhost:5000/api/translate \
 - **Loading States**: Clear feedback during translation
 - **Error Handling**: User-friendly error messages
 
-## 🔐 Security Features
+## Security Features
 
 - Helmet.js for security headers
 - CORS configuration
@@ -219,14 +219,14 @@ curl -X POST http://localhost:5000/api/translate \
 - Rate limiting ready
 - Environment variables for sensitive data
 
-## 📊 Performance
+## Performance
 
 - **Translation Speed**: < 2 seconds for most language pairs
 - **Concurrent Users**: Supports multiple simultaneous translations
 - **Caching**: Model caching for faster repeated translations
 - **Scalable**: Microservices architecture for easy scaling
 
-## 🛠️ Development
+## Development
 
 ### Running Tests
 ```bash
@@ -250,7 +250,7 @@ cd frontend
 npm run build
 ```
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -275,7 +275,7 @@ npm run build
    - Ensure backend is running on port 5000
    - Check CORS settings in backend
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
@@ -285,26 +285,22 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License.
 
-## 👥 Authors
+## Authors
 
-- Your Name - Initial work
+- Mukesh Ruwali 
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Hugging Face Transformers for MarianMT models
 - Google Translate API for fallback translation
 - React and TypeScript community
 - All contributors and supporters
 
-## 📞 Support
-
-For support, email your-email@example.com or open an issue in the repository.
-
-## 🗺️ Roadmap
+## Toadmap
 
 - [ ] Add speech-to-text (voice input)
 - [ ] Implement user authentication
@@ -314,6 +310,5 @@ For support, email your-email@example.com or open an issue in the repository.
 - [ ] Mobile app development
 - [ ] Add more regional Indian languages
 
----
-
-**Made with ❤️ for Rural Education**
+-
+**Made with for Rural Education**
